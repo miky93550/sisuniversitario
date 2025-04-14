@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Administrativos registrados</h3>
@@ -23,7 +23,13 @@
                         <thead>
                             <tr>
                                 <th style="text-align: center">Nro</th>
-
+                                <th style="text-align: center">Rol</th>
+                                <th style="text-align: center">Nombres</th>
+                                <th style="text-align: center">Apellidos</th>
+                                <th style="text-align: center">Cedula</th>
+                                <th style="text-align: center">Telefono</th>
+                                <th style="text-align: center">Email</th>
+                                <th style="text-align: center">Profesion</th>
                                 <th style="text-align: center">Acción</th>
                             </tr>
                         </thead>
@@ -34,25 +40,33 @@
                             @foreach ($administrativos as $administrativo)
                                 <tr>
                                     <td style="text-align: center">{{ $contador++ }}</td>
-
+                                    <td>{{ $administrativo->usuario->roles->pluck('name')->implode(', ') }}</td>
+                                    <td>{{ $administrativo->nombres }}</td>
+                                    <td>{{ $administrativo->apellidos }}</td>
+                                    <td>{{ $administrativo->ci }}</td>
+                                    <td>{{ $administrativo->telefono }}</td>
+                                    <td>{{ $administrativo->usuario->email }}</td>
+                                    <td>{{ $administrativo->profesion }}</td>
                                     <td style="text-align: center">
-                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url('/admin/administrativos/' . $administrativo->id) }}"
+                                                class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                                             <a href="{{ url('/admin/administrativos/' . $administrativo->id . '/edit') }}"
                                                 class="btn btn-success btn-sm"><i class="fas fa-pencil-alt"></i></a>
                                             <form action="{{ url('/admin/administrativos', $administrativo->id) }}"
-                                                onclick="preguntar{{ $administrativo->id }}"method="post"
-                                                id="preguntar{{ $administrativo->id }}(event)"id="miFormulario{{ $administrativo->id }}">
+                                                method="post" onsubmit="preguntar{{ $administrativo->id }}(event)"
+                                                id="miFormulario{{ $administrativo->id }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm"><i
                                                         class="fas fa-trash"></i></button>
                                             </form>
+
                                             <script>
                                                 function preguntar{{ $administrativo->id }}(event) {
                                                     event.preventDefault();
                                                     Swal.fire({
-                                                        title: '¿Desea eliminar esta registro?',
-                                                        text: '',
+                                                        title: '¿Desea eliminar este registro?',
                                                         icon: 'question',
                                                         showDenyButton: true,
                                                         confirmButtonText: 'Eliminar',
@@ -61,8 +75,7 @@
                                                         denyButtonText: 'Cancelar',
                                                     }).then((result) => {
                                                         if (result.isConfirmed) {
-                                                            var form = $('#miFormulario{{ $administrativo->id }}');
-                                                            form.submit();
+                                                            document.getElementById('miFormulario{{ $administrativo->id }}').submit();
                                                         }
                                                     });
                                                 }

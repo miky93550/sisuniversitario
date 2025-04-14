@@ -132,7 +132,7 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="nombres">Email</label><b>(*)</b>
+                                    <label for="email">Email</label><b>(*)</b>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
